@@ -15,3 +15,9 @@ tools/
 # 生成物（dist 里的发布产物例外）
 /gua.json
 .DS_Store
+
+# 根目录构建产物（发布件请放 dist/）
+/易卜.apk
+/易卜.apk.idsig
+/易卜.html
+*.idsig
