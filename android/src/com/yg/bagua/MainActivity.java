@@ -2,10 +2,12 @@ package com.yg.bagua;
 
 import android.app.Activity;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -46,9 +48,35 @@ public class MainActivity extends Activity {
             s.setAllowUniversalAccessFromFileURLs(true);
         } catch (Throwable ignored) { }
 
+        web.addJavascriptInterface(new Chrome(), "Android");
         web.setWebViewClient(new WebViewClient());
         setContentView(web);
         web.loadUrl("file:///android_asset/index.html");
+    }
+
+    /** 供页面调用：配色切换时同步系统栏颜色与图标明暗 */
+    private class Chrome {
+        @JavascriptInterface
+        public void setChrome(final String color, final boolean lightIcons) {
+            runOnUiThread(new Runnable() {
+                public void run() {
+                    try {
+                        int c = Color.parseColor(color);
+                        getWindow().setStatusBarColor(c);
+                        getWindow().setNavigationBarColor(c);
+                        View dv = getWindow().getDecorView();
+                        int flags = dv.getSystemUiVisibility();
+                        if (lightIcons) flags |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+                        else flags &= ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+                        if (Build.VERSION.SDK_INT >= 26) {
+                            if (lightIcons) flags |= View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
+                            else flags &= ~View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
+                        }
+                        dv.setSystemUiVisibility(flags);
+                    } catch (Throwable ignored) { }
+                }
+            });
+        }
     }
 
     @Override

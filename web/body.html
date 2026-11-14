@@ -1,0 +1,139 @@
+<div id="app">
+  <header>
+    <div>
+      <div class="h-title">易 卜</div>
+      <div class="h-sub">六十四卦 · 观象玩辞</div>
+    </div>
+    <div class="h-clock" id="clock"></div>
+  </header>
+
+  <!-- ========== 起卦 ========== -->
+  <section id="v-cast">
+    <div class="ask">
+      <input id="askInput" maxlength="40" placeholder="所占何事？心念既定，再取卦（可留空）">
+      <div class="chips" id="askChips"></div>
+    </div>
+
+    <div class="seg" id="modeSeg">
+      <button data-mode="coin" class="on">铜钱</button>
+      <button data-mode="time">时间</button>
+      <button data-mode="num">数字</button>
+      <button data-mode="hand">排卦</button>
+    </div>
+
+    <!-- 铜钱 -->
+    <div id="p-coin">
+      <div class="card">
+        <div class="coins" id="coins">
+          <div class="coin">背</div><div class="coin">背</div><div class="coin">背</div>
+        </div>
+        <div class="coin-legend" id="coinLegend">背为阳 · 字为阴</div>
+        <div class="stack" id="castStack" style="margin:14px 0 4px"></div>
+        <div style="text-align:center;font-size:12px;color:var(--text3);margin:10px 0 14px" id="castTip">
+          自下而上，共摇六次
+        </div>
+        <button class="btn" id="btnShake">摇 第 一 爻</button>
+        <div class="btn2">
+          <button class="btn ghost" id="btnQuick">一次摇完</button>
+          <button class="btn ghost" id="btnReset">重新起卦</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 时间 -->
+    <div id="p-time" class="hidden">
+      <div class="card">
+        <h3>以 时 起 卦</h3>
+        <div class="kv"><b>此刻</b><span id="timeNow">—</span></div>
+        <p class="hint">年月日取上下卦，加时辰取动爻。八字须用农历，此为随时占问之简法。</p>
+        <button class="btn" id="btnTime" style="margin-top:10px">以 此 刻 起 卦</button>
+      </div>
+    </div>
+
+    <!-- 数字 -->
+    <div id="p-num" class="hidden">
+      <div class="card">
+        <h3>以 数 起 卦</h3>
+        <div class="field"><label>上卦数</label><input id="numA" type="number" inputmode="numeric" placeholder="任意正整数"></div>
+        <div class="field"><label>下卦数</label><input id="numB" type="number" inputmode="numeric" placeholder="任意正整数"></div>
+        <div class="field"><label>动爻数</label><input id="numC" type="number" inputmode="numeric" placeholder="留空取两数之和"></div>
+        <p class="hint">除八取余定上下卦（余零作八），除六取余定动爻（余零作六）。心有所感之数最灵。</p>
+        <button class="btn" id="btnNum" style="margin-top:10px">起 卦</button>
+      </div>
+    </div>
+
+    <!-- 手动 -->
+    <div id="p-hand" class="hidden">
+      <div class="card">
+        <h3>手 动 排 卦</h3>
+        <p class="hint" style="margin-bottom:12px">点爻切换：少阳 → 老阳（动）→ 少阴 → 老阴（动）。自下而上为初二三四五上。</p>
+        <div class="stack" id="handStack" style="margin-bottom:14px"></div>
+        <button class="btn" id="btnHand">看 此 卦</button>
+      </div>
+    </div>
+
+    <div class="card daily" id="dailyCard"></div>
+    <div class="foot">卦以决疑 · 事在人为</div>
+  </section>
+
+  <!-- ========== 结果 ========== -->
+  <section id="v-result" class="hidden"></section>
+
+  <!-- ========== 卦典 ========== -->
+  <section id="v-lib" class="hidden">
+    <div class="searchbox">
+      <input id="libSearch" placeholder="搜卦名、卦象、卦辞、爻辞……">
+    </div>
+    <div class="grid64" id="libGrid"></div>
+    <div class="card" style="margin-top:16px">
+      <h3>八 卦 象 义</h3>
+      <div id="baguaTable"></div>
+    </div>
+    <div class="foot">通行本《周易》经文</div>
+  </section>
+
+  <!-- ========== 记录 ========== -->
+  <section id="v-hist" class="hidden">
+    <div id="histList"></div>
+    <div class="btn2" id="histOps" style="margin-top:14px">
+      <button class="btn ghost" id="btnExport">复制全部</button>
+      <button class="btn ghost" id="btnClearHist">清空记录</button>
+    </div>
+  </section>
+
+  <!-- ========== 设置 ========== -->
+  <section id="v-set" class="hidden">
+    <div class="card">
+      <h3>配 色</h3>
+      <div class="themes" id="themeList"></div>
+      <p class="hint" id="themeHint">墨：夜色铜金，最耐看</p>
+    </div>
+    <div class="card">
+      <h3>字 号</h3>
+      <div class="seg" id="fsSeg" style="margin:0">
+        <button data-fs="1">小</button>
+        <button data-fs="2" class="on">标准</button>
+        <button data-fs="3">大</button>
+      </div>
+    </div>
+    <div class="card">
+      <h3>关 于</h3>
+      <div class="kv"><b>版本</b><span id="verLine">1.1</span></div>
+      <div class="kv"><b>数据</b><span>通行本《周易》64 卦 384 爻</span></div>
+      <div class="kv"><b>断法</b><span>朱子《易学启蒙》变占法</span></div>
+      <p class="hint">本应用完全离线运行，不联网、不收集任何数据。占卦为决疑之助，吉凶在人事。</p>
+      <button class="btn ghost" id="btnResetAll" style="margin-top:10px">恢复默认设置</button>
+    </div>
+    <div class="foot">易卜 v1.1</div>
+  </section>
+</div>
+
+<nav id="nav">
+  <button data-view="cast" class="on"><span class="ic">☰</span>起卦</button>
+  <button data-view="result"><span class="ic">☵</span>解卦</button>
+  <button data-view="lib"><span class="ic">☷</span>卦典</button>
+  <button data-view="hist"><span class="ic">☶</span>记录</button>
+  <button data-view="set"><span class="ic">☱</span>设置</button>
+</nav>
+
+<div class="toast" id="toast"></div>
