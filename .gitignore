@@ -1,0 +1,17 @@
+# 构建时产生的东西
+android/build/
+android/assets/
+serve/
+data/__pycache__/
+__pycache__/
+*.pyc
+
+# 工具链与签名私钥，不入库
+tools/
+*.keystore
+*.jks
+*.p12
+
+# 生成物（dist 里的发布产物例外）
+/gua.json
+.DS_Store
